@@ -18,7 +18,7 @@ public class VehicleDao {
         // TODO: Implement the logic to add a vehicle
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT INTO car_dealership (make,model,year,color,vehicleType,odometer,price) VALUES (?,?,?,?,?,?,?)"
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO car_dealership (make,model,year,color,vehicleType,odometer,price) VALUES (?,?,?,?,?,?,?);"
                      ,PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, vehicle.getMake());
             statement.setString(2, vehicle.getModel());
@@ -41,7 +41,16 @@ public class VehicleDao {
 
     public void removeVehicle(String VIN) {
         // TODO: Implement the logic to remove a vehicle
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "DELETE FROM car_dealership WHERE VIN = ?")) {
+            statement.setInt(1, Integer.parseInt(VIN));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public List<Vehicle> searchByPriceRange(double minPrice, double maxPrice) {
         // TODO: Implement the logic to search vehicles by price range
